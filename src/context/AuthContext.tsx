@@ -35,8 +35,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && !user && !loading) {
-      if (!path.includes("participant")) {
-        redirect("/participant");
+      if (!path.includes("login")) {
+        redirect("/login");
       }
     }
   }, [user, loading]);
