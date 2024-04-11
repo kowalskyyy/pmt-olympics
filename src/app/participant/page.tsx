@@ -6,11 +6,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../../../firebaseConfig.js"; // Update this path
+import { auth, db } from "../../../firebaseConfig.js"; // Update this path
+import { doc, setDoc } from "firebase/firestore";
 
 export default function ParticipantPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
   const [isRegistering, setIsRegistering] = useState(false); // To toggle between sign-in and registration
 
   const handleSignIn = async () => {
@@ -26,8 +29,28 @@ export default function ParticipantPage() {
 
   const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log("User registered");
+
+      // Extract user
+      const user = userCredential.user;
+
+      // Create a user profile document in Firestore
+      await setDoc(doc(db, "UserScore", user.uid), {
+        email: user.email,
+        name: name,
+        lastName: lastname,
+        createdAt: new Date(),
+        scores: {
+          score1: 0,
+          score2: 0,
+          score3: 0,
+        },
+      });
       // Redirect or update UI, possibly sign the user in automatically
     } catch (error) {
       console.error("Error registering: ", error);
@@ -40,6 +63,26 @@ export default function ParticipantPage() {
       <Typography variant="h4" component="h1" gutterBottom>
         {isRegistering ? "Register" : "Sign In"}
       </Typography>
+      {isRegistering && (
+        <>
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            label="Last name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+          />
+        </>
+      )}
       <TextField
         label="Email"
         variant="outlined"
@@ -58,14 +101,17 @@ export default function ParticipantPage() {
         onChange={(e) => setPassword(e.target.value)}
       />
       {isRegistering ? (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleRegister}
-          fullWidth
-        >
-          Register
-        </Button>
+        <>
+          {" "}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleRegister}
+            fullWidth
+          >
+            Register
+          </Button>
+        </>
       ) : (
         <Button
           variant="contained"
