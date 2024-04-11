@@ -8,14 +8,14 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig.js"; // Update this path
 import { doc, setDoc } from "firebase/firestore";
-
+import { useRouter } from "next/navigation.js";
 export default function ParticipantPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [isRegistering, setIsRegistering] = useState(false); // To toggle between sign-in and registration
-
+  const router = useRouter();
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -51,6 +51,13 @@ export default function ParticipantPage() {
           score3: 0,
         },
       });
+      console.log("created user profile document");
+
+      await signInWithEmailAndPassword(auth, email, password);
+
+      console.log("signed in!");
+
+      router.push("/");
       // Redirect or update UI, possibly sign the user in automatically
     } catch (error) {
       console.error("Error registering: ", error);
