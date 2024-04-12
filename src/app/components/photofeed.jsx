@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
 } from "@mui/material";
+
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -171,8 +172,13 @@ export default function PhotoFeed() {
                     alt={`Uploaded ${index}`}
                     onClick={() => handleClickOpen(image.url)}
                     loading="lazy"
+                    style={{ cursor: "pointer" }}
                   />
-                  <ImageListItemBar title={`${image.user}`}></ImageListItemBar>
+                  <ImageListItemBar
+                    title={`${image.user}`}
+                    onClick={() => handleClickOpen(image.url)}
+                    style={{ cursor: "pointer" }}
+                  ></ImageListItemBar>
                 </ImageListItem>
               ))}
             </ImageList>
