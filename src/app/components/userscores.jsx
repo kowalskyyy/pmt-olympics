@@ -1,21 +1,36 @@
 import { useEffect, useState } from "react";
 import { db } from "../../../firebaseConfig"; 
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export default function UserScores() {
   const [userScores, setUserScores] = useState([]);
+  const [gameNames, setGameNames] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "UserScore"), (querySnapshot) => {
-      const scoresData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    const unsubscribeUserScores = onSnapshot(collection(db, "UserScore"), (querySnapshot) => {
+      const scoresData = querySnapshot.docs.map((doc) => {
+        const scores = doc.data().scores;
+        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+        return {
+          id: doc.id,
+          totalScore,
+          ...doc.data(),
+        };
+      });
+      scoresData.sort((a, b) => b.totalScore - a.totalScore);
       setUserScores(scoresData);
     });
-  
-    // Clean up the listener when the component unmounts
-    return () => unsubscribe();
+
+    const unsubscribeGames = onSnapshot(collection(db, "Games"), (querySnapshot) => {
+      const gameNamesData = querySnapshot.docs.map((doc) => doc.data().name);
+      setGameNames(gameNamesData);
+    });
+
+    // Clean up the listeners when the component unmounts
+    return () => {
+      unsubscribeUserScores();
+      unsubscribeGames();
+    };
   }, []);
 
   return (
@@ -26,9 +41,10 @@ export default function UserScores() {
             <tr>
               <th>Name</th>
               <th>Last Name</th>
-              <th>Score 1</th>
-              <th>Score 2</th>
-              <th>Score 3</th>
+              {gameNames.map((gameName) => (
+                <th key={gameName}>{gameName}</th>
+              ))}
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -36,9 +52,10 @@ export default function UserScores() {
               <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.lastName}</td>
-                <td>{user.scores.score1}</td>
-                <td>{user.scores.score2}</td>
-                <td>{user.scores.score3}</td>
+                {gameNames.map((gameName) => (
+                  <td key={gameName}>{user.scores[gameName] || "-"}</td>
+                ))}
+                <td>{user.totalScore}</td>
               </tr>
             ))}
           </tbody>
