@@ -181,6 +181,7 @@ export default function PhotoFeed() {
                       alt={`Uploaded ${index}`}
                       onClick={() => handleClickOpen(image.url)}
                       loading="lazy"
+                      style={{ cursor: "pointer" }}
                   />
                   <ImageListItemBar
                     title={`${image.user}`}
