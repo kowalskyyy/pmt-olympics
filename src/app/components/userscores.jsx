@@ -10,7 +10,7 @@ export default function UserScores() {
     const unsubscribeUserScores = onSnapshot(collection(db, "UserScore"), (querySnapshot) => {
       const scoresData = querySnapshot.docs.map((doc) => {
         const scores = doc.data().scores;
-        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+        const totalScore = Object.values(scores).reduce((a, b) => Number(a) + Number(b), 0);
         return {
           id: doc.id,
           totalScore,
