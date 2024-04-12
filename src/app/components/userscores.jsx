@@ -12,8 +12,14 @@ export default function UserScores() {
   useEffect(() => {
     const unsubscribeUserScores = onSnapshot(collection(db, "UserScore"), (querySnapshot) => {
       const scoresData = querySnapshot.docs.map((doc) => {
+
         const scores = doc.data().scores;
-        const totalScore = Object.values(scores).reduce((a, b) => Number(a) + Number(b), 0);
+        console.log('this', scores.Codebreaker)
+        let totalScore = Object.values(scores).reduce((a, b) => Number(a) + Number(b), 0);
+        if (scores.Codebreaker) {
+          const codebreakerScore = Number(scores.Codebreaker);
+          totalScore = totalScore - codebreakerScore + parseFloat((codebreakerScore * 0.2).toFixed(2));
+        }
         return {
           id: doc.id,
           totalScore,

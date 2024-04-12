@@ -108,7 +108,6 @@ export default function PhotoFeed() {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         if (data && data.images) {
-          console.log(data.images);
           for (let image of Object.values(data.images)) {
             allImages.push({
               url: image.url,
