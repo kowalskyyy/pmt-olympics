@@ -49,8 +49,7 @@ export default function UserScores() {
       <Table>
         <TableHead sx={{backgroundColor: '#f5f5f5'}}>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Last Name</TableCell>
+            <StickyTableCell>Name</StickyTableCell>
             {gameNames.map((gameName) => (
               <TableCell key={gameName}>{gameName}</TableCell>
             ))}
@@ -61,8 +60,7 @@ export default function UserScores() {
           {userScores.length > 0 ? (
             userScores.map((user) => (
               <TableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.lastName}</TableCell>
+                <StickyTableCell>{user.name + " " + user.lastName}</StickyTableCell>
                 {gameNames.map((gameName) => (
                   <TableCell key={gameName}>{user.scores[gameName] || "-"}</TableCell>
                 ))}
