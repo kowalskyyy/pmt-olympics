@@ -15,6 +15,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthContext } from "../../context/AuthContext";
 import Alert from "@mui/material/Alert";
+import { CardMedia } from '@mui/material';
+
 
 import {
   getStorage,
@@ -139,25 +141,31 @@ export default function PhotoFeed() {
   return (
     <>
       <Container maxWidth="sm" sx={{ mt: 2 }}>
-        <input
-          accept="image/*"
-          style={{ display: "none" }}
-          id="raised-button-file"
-          multiple
-          type="file"
-          onChange={handleImageChange}
-        />
-        <label htmlFor="raised-button-file">
+      <Typography variant="h3">
+            Live feed
+          </Typography>
+          <span style={{display: "flex", alignItems: "center"}}>
+
           <Typography variant="body1">
             Submit your photo to the Olympics live feed
           </Typography>
-          <Button component="span">Upload</Button>
-
+          <input
+            accept="image/*"
+            style={{ display: "none" }}
+            id="raised-button-file"
+            multiple
+            type="file"
+            onChange={handleImageChange}
+          />
+          <label htmlFor="raised-button-file">
+          <Button component="span" variant="contained" color="primary" sx={{ ml: 1 }}>Upload</Button>
           {error && <Alert severity="error">{error}</Alert>}
           {uploading && (
             <LinearProgress variant="determinate" value={progress} />
           )}
         </label>
+        </span>
+
         <Box sx={{maxHeight: "600px"}}>
           {loadingImages ? (
             <Box display="flex" justifyContent="center" alignItems="center">
@@ -167,12 +175,12 @@ export default function PhotoFeed() {
             <ImageList cols={2} variant="masonry" gap={4} >
               {images.map((image, index) => (
                 <ImageListItem key={index}>
-                  <img
-                    src={image.url}
-                    alt={`Uploaded ${index}`}
-                    onClick={() => handleClickOpen(image.url)}
-                    loading="lazy"
-                    style={{ cursor: "pointer" }}
+                  <CardMedia
+                      component="img"
+                      image={image.url}
+                      alt={`Uploaded ${index}`}
+                      onClick={() => handleClickOpen(image.url)}
+                      loading="lazy"
                   />
                   <ImageListItemBar
                     title={`${image.user}`}
@@ -190,11 +198,12 @@ export default function PhotoFeed() {
         </Box>
         <Dialog open={open} onClose={handleClose} maxWidth="md">
           <DialogContent>
-            <img
-              src={selectedImage}
+            <CardMedia
+              component="img"
+              image={selectedImage}
               alt="Selected"
               style={{ width: "100%", height: "auto", objectFit: "contain" }}
-            />
+              />
           </DialogContent>
         </Dialog>
       </Container>

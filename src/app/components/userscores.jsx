@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { db } from "../../../firebaseConfig"; 
 import { collection, onSnapshot } from "firebase/firestore";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { styled } from '@mui/system';
+
 
 export default function UserScores() {
   const [userScores, setUserScores] = useState([]);
@@ -34,17 +36,25 @@ export default function UserScores() {
     };
   }, []);
 
+  const StickyTableCell = styled(TableCell)(({ theme }) => ({
+    position: 'sticky',
+    right: 0,
+    backgroundColor: '#f5f5f5',
+    fontWeight: 'bold',
+    boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.2)',
+  }));
+
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
+        <TableHead sx={{backgroundColor: '#f5f5f5'}}>
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Last Name</TableCell>
             {gameNames.map((gameName) => (
               <TableCell key={gameName}>{gameName}</TableCell>
             ))}
-            <TableCell>Total</TableCell>
+            <StickyTableCell>Total</StickyTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -56,7 +66,7 @@ export default function UserScores() {
                 {gameNames.map((gameName) => (
                   <TableCell key={gameName}>{user.scores[gameName] || "-"}</TableCell>
                 ))}
-                <TableCell>{user.totalScore}</TableCell>
+                <StickyTableCell>{user.totalScore}</StickyTableCell>
               </TableRow>
             ))
           ) : (

@@ -5,9 +5,22 @@ import Link from "next/link";
 import { useAuthContext } from "../../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import { Dialog } from "@mui/material";
+import { CardMedia } from "@mui/material";
+import { useState } from "react";
 
 export default function NavBar({ navButton, url }) {
   const { user, loading } = useAuthContext();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -27,6 +40,13 @@ export default function NavBar({ navButton, url }) {
           Digital Scoreboard
         </Typography>
         <>
+          {" "}
+          <Button color="inherit" onClick={handleClickOpen}>
+            Map
+          </Button>
+          <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <CardMedia component="img" image={`/map.png`} loading="lazy" />
+          </Dialog>
           <Button color="inherit" component={Link} href={url}>
             {navButton}
           </Button>
