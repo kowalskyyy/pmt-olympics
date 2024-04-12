@@ -75,7 +75,7 @@ export default function PhotoFeed() {
           const timestamp = new Date();
           // Add the image URL and timestamp to the 'images' field in the UserScore collection
           const userScoreRef = doc(collection(db, "UserScore"), user.uid); // Replace "user_id" with the actual user ID
-          setDoc(userScoreRef, { images: { [img.name]: url } }, { merge: true });
+          updateDoc(userScoreRef, { images: arrayUnion({ url, timestamp: timestamp }) });
         });
         console.log(`Uploaded ${img.name}`);
         setUploading(false);
@@ -143,7 +143,11 @@ export default function PhotoFeed() {
               <img
                 src={image.url}
                 alt={`Uploaded ${index}`}
-                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "aspect-fill",
+                }}
                 onClick={() => handleClickOpen(url)}
               />
             </ImageListItem>
