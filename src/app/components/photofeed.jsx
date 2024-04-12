@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthContext } from "../../context/AuthContext";
@@ -106,7 +107,11 @@ export default function PhotoFeed() {
         if (data && data.images) {
           console.log(data.images);
           for (let image of Object.values(data.images)) {
-            allImages.push({ url: image.url, timestamp: image.timestamp });
+            allImages.push({
+              url: image.url,
+              timestamp: image.timestamp,
+              user: `${data.name ?? "Anonymous"}  ${data.lastName ?? "User"}`,
+            });
           }
         }
       });
@@ -158,19 +163,16 @@ export default function PhotoFeed() {
               <CircularProgress />
             </Box>
           ) : images.length > 0 ? (
-            <ImageList cols={2}>
+            <ImageList cols={2} variant="masonry" gap={4}>
               {images.map((image, index) => (
                 <ImageListItem key={index}>
                   <img
                     src={image.url}
                     alt={`Uploaded ${index}`}
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "aspect-fill",
-                    }}
-                    onClick={() => handleClickOpen(url)}
+                    onClick={() => handleClickOpen(image.url)}
+                    loading="lazy"
                   />
+                  <ImageListItemBar title={`${image.user}`}></ImageListItemBar>
                 </ImageListItem>
               ))}
             </ImageList>
