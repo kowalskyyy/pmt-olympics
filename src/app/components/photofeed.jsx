@@ -20,7 +20,7 @@ import {
   getDownloadURL,
   listAll,
 } from "firebase/storage";
-import { db } from "../../../firebaseConfig"; 
+import { db } from "../../../firebaseConfig";
 import { collection, doc, setDoc, onSnapshot } from "firebase/firestore";
 
 export default function PhotoFeed() {
@@ -74,7 +74,11 @@ export default function PhotoFeed() {
           setImages([...images, url]);
           // Add the image URL to the 'images' field in the UserScore collection
           const userScoreRef = doc(collection(db, "UserScore"), user.uid); // Replace "user_id" with the actual user ID
-          setDoc(userScoreRef, { images: { [img.name]: url } }, { merge: true });
+          setDoc(
+            userScoreRef,
+            { images: { [img.name]: url } },
+            { merge: true }
+          );
         });
         console.log(`Uploaded ${img.name}`);
         setUploading(false);
@@ -94,7 +98,7 @@ export default function PhotoFeed() {
       });
       setImages(allImages);
     });
-  
+
     // Clean up the listener when the component unmounts
     return () => {
       unsubscribe();
@@ -137,7 +141,11 @@ export default function PhotoFeed() {
               <img
                 src={url}
                 alt={`Uploaded ${index}`}
-                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "aspect-fill",
+                }}
                 onClick={() => handleClickOpen(url)}
               />
             </ImageListItem>
