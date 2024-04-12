@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../../../firebaseConfig"; 
 import { collection, onSnapshot } from "firebase/firestore";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 export default function UserScores() {
   const [userScores, setUserScores] = useState([]);
@@ -34,35 +35,37 @@ export default function UserScores() {
   }, []);
 
   return (
-    <div>
-      {userScores.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Last Name</th>
-              {gameNames.map((gameName) => (
-                <th key={gameName}>{gameName}</th>
-              ))}
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userScores.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.lastName}</td>
-                {gameNames.map((gameName) => (
-                  <td key={gameName}>{user.scores[gameName] || "-"}</td>
-                ))}
-                <td>{user.totalScore}</td>
-              </tr>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Last Name</TableCell>
+            {gameNames.map((gameName) => (
+              <TableCell key={gameName}>{gameName}</TableCell>
             ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No user scores available.</p>
-      )}
-    </div>
+            <TableCell>Total</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {userScores.length > 0 ? (
+            userScores.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                {gameNames.map((gameName) => (
+                  <TableCell key={gameName}>{user.scores[gameName] || "-"}</TableCell>
+                ))}
+                <TableCell>{user.totalScore}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={gameNames.length + 3}>No user scores available.</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
