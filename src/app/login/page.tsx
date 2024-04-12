@@ -38,6 +38,11 @@ export default function LoginPage() {
 
       const user = userCredential.user;
 
+      if (!email.includes("pinmeto.com")) {
+        alert("Please use a pinmeto email address to register");
+        return;
+      }
+
       await setDoc(doc(db, "UserScore", user.uid), {
         email: user.email,
         name: name,
