@@ -10,6 +10,7 @@ import {
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthContext } from "../../context/AuthContext";
 import Alert from "@mui/material/Alert";
 
@@ -20,8 +21,15 @@ import {
   getDownloadURL,
   listAll,
 } from "firebase/storage";
-import { db } from "../../../firebaseConfig"; 
-import { collection, doc, updateDoc, onSnapshot, serverTimestamp, arrayUnion } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import {
+  collection,
+  doc,
+  updateDoc,
+  onSnapshot,
+  serverTimestamp,
+  arrayUnion,
+} from "firebase/firestore";
 
 export default function PhotoFeed() {
   const storage = getStorage();
@@ -37,6 +45,8 @@ export default function PhotoFeed() {
   const [progress, setProgress] = useState(0);
 
   const [error, setError] = useState(null);
+
+  const [loadingImages, setLoadingImages] = useState(true);
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
@@ -75,7 +85,9 @@ export default function PhotoFeed() {
           const timestamp = new Date();
           // Add the image URL and timestamp to the 'images' field in the UserScore collection
           const userScoreRef = doc(collection(db, "UserScore"), user.uid); // Replace "user_id" with the actual user ID
-          updateDoc(userScoreRef, { images: arrayUnion({ url, timestamp: timestamp }) });
+          updateDoc(userScoreRef, {
+            images: arrayUnion({ url, timestamp: timestamp }),
+          });
         });
         console.log(`Uploaded ${img.name}`);
         setUploading(false);
@@ -84,13 +96,15 @@ export default function PhotoFeed() {
   };
 
   useEffect(() => {
+    setLoadingImages(true);
+
     const userScoreCollectionRef = collection(db, "UserScore");
     const unsubscribe = onSnapshot(userScoreCollectionRef, (querySnapshot) => {
       const allImages = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         if (data && data.images) {
-          console.log(data.images)
+          console.log(data.images);
           for (let image of Object.values(data.images)) {
             allImages.push({ url: image.url, timestamp: image.timestamp });
           }
@@ -99,6 +113,7 @@ export default function PhotoFeed() {
       console.log(allImages);
       allImages.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
       setImages(allImages);
+      setLoadingImages(false);
     });
 
     // Clean up the listener when the component unmounts
@@ -137,22 +152,34 @@ export default function PhotoFeed() {
             <LinearProgress variant="determinate" value={progress} />
           )}
         </label>
-        <ImageList cols={2}>
-          {images.map((image, index) => (
-            <ImageListItem key={index}>
-              <img
-                src={image.url}
-                alt={`Uploaded ${index}`}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "aspect-fill",
-                }}
-                onClick={() => handleClickOpen(image.url)}
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        <Box>
+          {loadingImages ? (
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <CircularProgress />
+            </Box>
+          ) : images.length > 0 ? (
+            <ImageList cols={2}>
+              {images.map((image, index) => (
+                <ImageListItem key={index}>
+                  <img
+                    src={image.url}
+                    alt={`Uploaded ${index}`}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "aspect-fill",
+                    }}
+                    onClick={() => handleClickOpen(url)}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          ) : (
+            <Typography variant="body1">
+              Be the first to submit your footage!
+            </Typography>
+          )}
+        </Box>
         <Dialog open={open} onClose={handleClose} maxWidth="md">
           <DialogContent>
             <img
