@@ -16,9 +16,6 @@ export default function HomePage() {
               Digital Scoreboard
             </Typography>
             <UserScores />
-            <Typography variant="body1">
-              This is where the scores will be displayed.
-            </Typography>
           </Container>
         </Grid>
         <Grid item xs={12} sm={6}>
