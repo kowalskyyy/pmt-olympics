@@ -43,7 +43,11 @@ export default function GameScoreInput({ game }) {
 
   return (
     <>
-      <Card variant="outlined" key={game.id}>
+      <Card
+        variant="outlined"
+        key={game.id}
+        sx={{ backgroundColor: "#d3e9ff", margin: "1rem" }}
+      >
         <CardContent>
           <h2>{game.name}</h2>
           <p>Number of participants: {game.participants}</p>
