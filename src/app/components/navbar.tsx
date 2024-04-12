@@ -18,7 +18,10 @@ export default function NavBar({ navButton, url }) {
     }
   };
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "#3399ff", color: "#ffffff" }}
+    >
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Digital Scoreboard
