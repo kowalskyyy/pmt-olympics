@@ -7,6 +7,11 @@ import {
   Dialog,
   DialogContent,
 } from "@mui/material";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import LinearProgress from "@mui/material/LinearProgress";
+import Alert from "@mui/material/Alert";
+
 import {
   getStorage,
   ref,
@@ -23,26 +28,48 @@ export default function PhotoFeed() {
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const [error, setError] = useState(null);
+
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
+      handleUpload(e.target.files[0]);
     }
   };
 
-  const handleUpload = () => {
-    const storageRef = ref(storage, `images/${image.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, image);
+  const handleUpload = (img) => {
+    if (!img) {
+      setError("No image selected");
+      return;
+    }
+
+    setUploading(true);
+    setProgress(0);
+
+    const storageRef = ref(storage, `images/${img.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, img);
 
     uploadTask.on(
       "state_changed",
-      (snapshot) => {},
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
       (error) => {
         console.log(error);
+        setUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImages([...images, url]);
         });
+        console.log(`Uploaded ${img.name}`);
+        setUploading(false);
       }
     );
   };
@@ -54,7 +81,9 @@ export default function PhotoFeed() {
       let urlPromises = result.items.map((imageRef) =>
         getDownloadURL(imageRef)
       );
-      Promise.all(urlPromises).then((urls) => setImages(urls));
+      Promise.all(urlPromises).then((urls) => {
+        setImages(urls);
+      });
     };
     fetchImages();
   }, []);
@@ -83,18 +112,24 @@ export default function PhotoFeed() {
             Submit your photo to the Olympics live feed
           </Typography>
           <Button component="span">Upload</Button>
+
+          {error && <Alert severity="error">{error}</Alert>}
+          {uploading && (
+            <LinearProgress variant="determinate" value={progress} />
+          )}
         </label>
-        <Box>
+        <ImageList cols={2}>
           {images.map((url, index) => (
-            <img
-              src={url}
-              alt={`Uploaded ${index}`}
-              key={index}
-              style={{ width: "100%", height: "auto", objectFit: "contain" }}
-              onClick={() => handleClickOpen(url)}
-            />
+            <ImageListItem key={index}>
+              <img
+                src={url}
+                alt={`Uploaded ${index}`}
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                onClick={() => handleClickOpen(url)}
+              />
+            </ImageListItem>
           ))}
-        </Box>
+        </ImageList>
         <Dialog open={open} onClose={handleClose} maxWidth="md">
           <DialogContent>
             <img
