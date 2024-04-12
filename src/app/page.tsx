@@ -10,7 +10,7 @@ import UserScores from "@/app/components/userscores";
 export default function HomePage() {
   return (
     <>
-      <NavBar navButton="My account" url="/my-account" />
+      <NavBar navButton="My scores" url="/my-account" />
       <span style={{ display: "block", height: "15px" }} />
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>

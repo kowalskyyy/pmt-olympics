@@ -66,7 +66,6 @@ export default function AccountPage() {
         <button type="submit">Add Game</button>
       </form>
       </>}
-      <Container maxWidth="sm">My account</Container>
     </>
   );
 }

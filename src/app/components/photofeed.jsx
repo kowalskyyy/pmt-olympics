@@ -157,13 +157,13 @@ export default function PhotoFeed() {
             <LinearProgress variant="determinate" value={progress} />
           )}
         </label>
-        <Box>
+        <Box sx={{maxHeight: "600px"}}>
           {loadingImages ? (
             <Box display="flex" justifyContent="center" alignItems="center">
               <CircularProgress />
             </Box>
           ) : images.length > 0 ? (
-            <ImageList cols={2} variant="masonry" gap={4}>
+            <ImageList cols={2} variant="masonry" gap={4} >
               {images.map((image, index) => (
                 <ImageListItem key={index}>
                   <img
