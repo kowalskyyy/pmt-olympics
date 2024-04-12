@@ -45,6 +45,11 @@ export default function HomePage() {
                     <br />
                     Remember to take funny pictures and upload them to our
                     digital gallery! <br />
+                    <br />
+                    Also, here is the link to codebreaker:{" "}
+                    <a href="https://luisaescalona.github.io/codebreaker/">
+                      link!
+                    </a>
                   </Typography>{" "}
                 </Grid>
               </Grid>
