@@ -45,7 +45,7 @@ export default function UserScores() {
   }));
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} >
       <Table>
         <TableHead sx={{backgroundColor: '#f5f5f5'}}>
           <TableRow>

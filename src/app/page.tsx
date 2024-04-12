@@ -24,34 +24,14 @@ export default function HomePage() {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Grid item xs={12} sm={6}>
-                  <img
-                    src="/olympics.png"
-                    alt="hero"
-                    style={{ width: "100%" }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} sx={{ pl: 1 }}>
-                  <Typography variant="h4" component="h1" gutterBottom>
-                    Welcome to Pinmeto Olympics 2024!{" "}
-                  </Typography>{" "}
-                  <Typography variant="subtitle1" component="h1" gutterBottom>
-                    We are so excited to have you here! On this page you will
-                    find everything you need to compete, have fun, and win!{" "}
-                    <br />
-                    <br />
-                    Follow the map to compete in the different challenges and
-                    input your score under the `My scores` tab. <br />
-                    <br />
-                    Remember to take funny pictures and upload them to our
-                    digital gallery! <br />
-                    <br />
-                    Also, here is the link to codebreaker:{" "}
-                    <a href="https://luisaescalona.github.io/codebreaker/">
-                      link!
-                    </a>
-                  </Typography>{" "}
-                </Grid>
+                <Typography variant="subtitle1" component="h1" gutterBottom>
+                  <br />
+                  <br />
+                  Also, here is the link to codebreaker:{" "}
+                  <a href="https://luisaescalona.github.io/codebreaker/">
+                    link!
+                  </a>
+                </Typography>{" "}
               </Grid>
             </CardContent>
           </Card>
@@ -59,7 +39,7 @@ export default function HomePage() {
             <CardContent
               sx={{ display: "flex", flexDirection: "column", padding: "0px" }}
             >
-              <Container maxWidth="sm" sx={{ mt: 2 }}>
+              <Container sx={{ mt: 2 }}>
                 <Typography variant="h3" component="h1" gutterBottom>
                   Digital Scoreboard
                 </Typography>
