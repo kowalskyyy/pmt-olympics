@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Button, Typography, Container } from "@mui/material";
 import Link from "next/link";
 import { useAuthContext } from "../../context/AuthContext";
 import { signOut } from "firebase/auth";
-import { auth } from "../../../firebaseConfig"; // Update this path
+import { auth } from "../../../firebaseConfig";
 
 export default function NavBar({ navButton, url }) {
   const { user, loading } = useAuthContext();

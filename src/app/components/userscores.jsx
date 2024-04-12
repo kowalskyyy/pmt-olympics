@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { db } from "../../../firebaseConfig"; // Update this path if necessary
-import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebaseConfig"; 
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
 export default function UserScores() {
   const [userScores, setUserScores] = useState([]);
 
   useEffect(() => {
-    const fetchUserScores = async () => {
-      const querySnapshot = await getDocs(collection(db, "UserScore"));
+    const unsubscribe = onSnapshot(collection(db, "UserScore"), (querySnapshot) => {
       const scoresData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setUserScores(scoresData);
-    };
-
-    fetchUserScores();
+    });
+  
+    // Clean up the listener when the component unmounts
+    return () => unsubscribe();
   }, []);
 
   return (

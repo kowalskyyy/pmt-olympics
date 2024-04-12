@@ -1,13 +1,7 @@
 "use client";
 
-import { AppBar, Toolbar, Button, Typography, Container } from "@mui/material";
-import Link from "next/link";
-import { useAuthContext } from "../context/AuthContext";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig"; // Update this path
+import { Typography, Container } from "@mui/material";
 import NavBar from "../app/components/navbar";
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
 import UserScores from "@/app/components/userscores";
 
 export default function HomePage() {

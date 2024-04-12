@@ -9,7 +9,7 @@ import React, {
   use,
 } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../../firebaseConfig"; // Adjust the path as necessary
+import { auth } from "../../firebaseConfig";
 import { redirect, usePathname } from "next/navigation";
 
 interface AuthContextType {

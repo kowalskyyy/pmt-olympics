@@ -1,4 +1,3 @@
-// app/protectedRoute.js
 import { useAuth } from "../context/AuthContext";
 import { CircularProgress, Box } from "@mui/material";
 import React from "react";

@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, db } from "../../../firebaseConfig.js"; // Update this path
+import { auth, db } from "../../../firebaseConfig.js";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation.js";
 export default function LoginPage() {
@@ -14,13 +14,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false); // To toggle between sign-in and registration
+  const [isRegistering, setIsRegistering] = useState(false);
   const router = useRouter();
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User signed in");
-      // Redirect or update UI
+      router.push("/");
     } catch (error) {
       console.error("Error signing in: ", error);
       alert("Error signing in. Please check your credentials.");
@@ -36,10 +36,8 @@ export default function LoginPage() {
       );
       console.log("User registered");
 
-      // Extract user
       const user = userCredential.user;
 
-      // Create a user profile document in Firestore
       await setDoc(doc(db, "UserScore", user.uid), {
         email: user.email,
         name: name,
@@ -58,7 +56,6 @@ export default function LoginPage() {
       console.log("signed in!");
 
       router.push("/");
-      // Redirect or update UI, possibly sign the user in automatically
     } catch (error) {
       console.error("Error registering: ", error);
       alert("Error registering. Please try again.");
