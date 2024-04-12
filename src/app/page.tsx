@@ -18,15 +18,20 @@ export default function HomePage() {
             <CardContent
               sx={{ display: "flex", flexDirection: "column", padding: "0px" }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={10} sm={5}>
+              <Grid
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item xs={12} sm={6}>
                   <img
                     src="/olympics.png"
                     alt="hero"
                     style={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={10} sm={5}>
+                <Grid item xs={12} sm={6} sx={{ pl: 1 }}>
                   <Typography variant="h4" component="h1" gutterBottom>
                     Welcome to Pinmeto Olympics 2024!{" "}
                   </Typography>{" "}
