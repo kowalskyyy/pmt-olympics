@@ -28,7 +28,7 @@ export default function HomePage() {
         <Grid item xs={12} sm={6}>
           <Card sx={{ backgroundColor: "#d3e9ff" }}>
             <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ overflow: "auto", maxWidth: "600px" }}>
+              <div style={{ overflow: "auto", width: "100%" }}>
                 <PhotoFeed />
               </div>
             </CardContent>
