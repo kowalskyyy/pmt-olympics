@@ -148,7 +148,7 @@ export default function PhotoFeed() {
                   height: "auto",
                   objectFit: "aspect-fill",
                 }}
-                onClick={() => handleClickOpen(url)}
+                onClick={() => handleClickOpen(image.url)}
               />
             </ImageListItem>
           ))}
