@@ -43,11 +43,7 @@ export default function LoginPage() {
         name: name,
         lastName: lastname,
         createdAt: new Date(),
-        scores: {
-          score1: 13,
-          score2: 13,
-          score3: 13,
-        },
+        scores: {},
       });
       console.log("created user profile document");
 

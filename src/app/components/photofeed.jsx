@@ -20,8 +20,8 @@ import {
   getDownloadURL,
   listAll,
 } from "firebase/storage";
-import { db } from "../../../firebaseConfig";
-import { collection, doc, setDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebaseConfig"; 
+import { collection, doc, updateDoc, onSnapshot, serverTimestamp, arrayUnion } from "firebase/firestore";
 
 export default function PhotoFeed() {
   const storage = getStorage();
@@ -71,14 +71,11 @@ export default function PhotoFeed() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setImages([...images, url]);
-          // Add the image URL to the 'images' field in the UserScore collection
+          setImages([...images, { url, timestamp: serverTimestamp() }]);
+          const timestamp = new Date();
+          // Add the image URL and timestamp to the 'images' field in the UserScore collection
           const userScoreRef = doc(collection(db, "UserScore"), user.uid); // Replace "user_id" with the actual user ID
-          setDoc(
-            userScoreRef,
-            { images: { [img.name]: url } },
-            { merge: true }
-          );
+          setDoc(userScoreRef, { images: { [img.name]: url } }, { merge: true });
         });
         console.log(`Uploaded ${img.name}`);
         setUploading(false);
@@ -93,9 +90,14 @@ export default function PhotoFeed() {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         if (data && data.images) {
-          allImages.push(...Object.values(data.images));
+          console.log(data.images)
+          for (let image of Object.values(data.images)) {
+            allImages.push({ url: image.url, timestamp: image.timestamp });
+          }
         }
       });
+      console.log(allImages);
+      allImages.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
       setImages(allImages);
     });
 
@@ -136,16 +138,12 @@ export default function PhotoFeed() {
           )}
         </label>
         <ImageList cols={2}>
-          {images.map((url, index) => (
+          {images.map((image, index) => (
             <ImageListItem key={index}>
               <img
-                src={url}
+                src={image.url}
                 alt={`Uploaded ${index}`}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "aspect-fill",
-                }}
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
                 onClick={() => handleClickOpen(url)}
               />
             </ImageListItem>
