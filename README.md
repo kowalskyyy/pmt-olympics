@@ -3,6 +3,8 @@ Digital scoreboard - Hackday 12.04.2024
 
 Simple platform for keeping scores on game nights and similar events. Used as a Live scoreboard during a company event. Built during one day, so expect few hacky things... at least few.
 
+<img width="1722" alt="Screenshot 2024-05-07 at 10 11 53" src="https://github.com/kowalskyyy/pmt-olympics/assets/109525948/546f58ff-2169-4390-abf5-8823a633a6f4">
+
 Main functionality:
 - User authentication with Login and Register options
 - User input score form, where individual users can add, modify and delete scores for each game
